@@ -1,0 +1,44 @@
+# cpanm local install
+local/
+
+# Build artifacts
+blib/
+pm_to_blib
+*.bs
+*.o
+*.c
+*.h
+
+# MakeMaker
+Makefile
+Makefile.old
+MYMETA.*
+MANIFEST.bak
+
+# Module::Build
+Build
+_build/
+Build.bat
+
+# Temporary files
+*.swp
+*.swo
+*~
+*.bak
+*.old
+*.tmp
+
+# Cover database
+cover_db/
+
+# Prove state
+.prove
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

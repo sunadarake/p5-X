@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(busybox ls:*)",
+      "Bash(busybox echo:*)",
+      "Bash(busybox mkdir:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
