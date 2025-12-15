@@ -41,12 +41,14 @@ sub import {
             package $caller;
             use Win32::Unicode::Native;
             use utf8;
+            1;
         } or die $@;
     } else {
         require utf8::all;
         eval qq{
             package $caller;
             use utf8::all;
+            1;
         } or die $@;
     }
 
