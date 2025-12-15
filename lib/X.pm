@@ -40,7 +40,7 @@ sub import {
         eval qq{
             package $caller;
             use Win32::Unicode::Native;
-            use utf8;
+            utf8->import;
             1;
         } or die $@;
     } else {
