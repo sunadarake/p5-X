@@ -9,7 +9,7 @@ use File::Spec;
 our $VERSION = '0.01';
 
 use Exporter 'import';
-our @EXPORT = qw(which sh);
+our @EXPORT = qw(which sh iswin);
 
 # コマンドのフルパスを返す（見つからない場合はundef）
 sub which {
@@ -76,6 +76,11 @@ sub _quote_arg {
     }
 
     return $arg;
+}
+
+# Windowsかどうかを判定
+sub iswin {
+    return $^O eq 'MSWin32';
 }
 
 1;
