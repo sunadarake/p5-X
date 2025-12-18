@@ -34,11 +34,12 @@ sub import {
     my $class = shift;
     my $caller = caller;
 
+    'utf8'->import::into($caller);
+
     # プラットフォーム別に適切なモジュールを呼び出し側に適用
     if ($^O eq 'MSWin32') {
         require Win32::Unicode::Native;
         Win32::Unicode::Native->import::into($caller);
-        'utf8'->import::into($target);
     } else {
         require utf8::all;
         utf8::all->import::into($caller);
