@@ -1,6 +1,7 @@
 requires 'perl', '5.010';
 requires 'HTTP::Tiny';
 requires 'URI';
+requires 'Import::Into';
 
 # Linux/Mac用のUnicode処理
 on '!MSWin32' => sub {

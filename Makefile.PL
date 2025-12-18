@@ -5,10 +5,11 @@ use ExtUtils::MakeMaker;
 
 # プラットフォーム別の依存関係を設定
 my %prereq_pm = (
-    'strict'     => 0,
-    'warnings'   => 0,
-    'HTTP::Tiny' => 0,
-    'URI'        => 0,
+    'strict'       => 0,
+    'warnings'     => 0,
+    'HTTP::Tiny'   => 0,
+    'URI'          => 0,
+    'Import::Into' => 0,
 );
 
 # Linux/Mac用のUnicode処理
@@ -18,7 +19,7 @@ if ($^O ne 'MSWin32') {
 # Windows用のUnicode処理
 # Win32::Unicode::Nativeは git@github.com:sunadarake/p5-win-unicode.git から手動インストール
 elsif ($^O eq 'MSWin32') {
-    $prereq_pm{'Win32::Unicode::Native'} = 0;
+    $prereq_pm{'Win32::Unicode'} = 0;
 }
 
 WriteMakefile(
