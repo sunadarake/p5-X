@@ -1,6 +1,17 @@
 
 package DB {
     use utf8;
+
+    BEGIN {
+        if ($^O eq 'MSWin32') {
+            require Win32::Unicode::Native;
+            Win32::Unicode::Native->import();
+        } else {
+            require utf8::all;
+            utf8::all->import();
+        }
+    }
+
     use Carp qw(croak);
     use DBI;
 

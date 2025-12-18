@@ -4,6 +4,17 @@ package X::File;
 use strict;
 use warnings;
 use utf8;
+
+BEGIN {
+    if ($^O eq 'MSWin32') {
+        require Win32::Unicode::Native;
+        Win32::Unicode::Native->import();
+    } else {
+        require utf8::all;
+        utf8::all->import();
+    }
+}
+
 use File::Find;
 use File::Path qw(make_path remove_tree);
 use File::Copy qw(copy move);
@@ -59,7 +70,7 @@ sub fg {
     my ($filepath) = @_;
     return undef unless -f $filepath;
 
-    open my $fh, '<:utf8', $filepath or die "Cannot open $filepath: $!";
+    open my $fh, '<', $filepath or die "Cannot open $filepath: $!";
     my $content = do { local $/; <$fh> };
     close $fh;
 
@@ -74,7 +85,7 @@ sub fp {
     my $dir = dirname($filepath);
     make_path($dir) unless -d $dir;
 
-    open my $fh, '>:utf8', $filepath or die "Cannot write to $filepath: $!";
+    open my $fh, '>', $filepath or die "Cannot write to $filepath: $!";
     print $fh $content;
     close $fh;
 

@@ -4,6 +4,17 @@ package X::Shell;
 use strict;
 use warnings;
 use utf8;
+
+BEGIN {
+    if ($^O eq 'MSWin32') {
+        require Win32::Unicode::Native;
+        Win32::Unicode::Native->import();
+    } else {
+        require utf8::all;
+        utf8::all->import();
+    }
+}
+
 use File::Spec;
 
 our $VERSION = '0.01';
