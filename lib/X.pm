@@ -37,19 +37,11 @@ sub import {
     # プラットフォーム別に適切なモジュールを呼び出し側に適用
     if ($^O eq 'MSWin32') {
         require Win32::Unicode::Native;
-        eval qq{
-            package $caller;
-            use Win32::Unicode::Native;
-            utf8->import;
-            1;
-        } or die $@;
+        Win32::Unicode::Native->import::into($caller);
+        'utf8'->import::into($target);
     } else {
         require utf8::all;
-        eval qq{
-            package $caller;
-            use utf8::all;
-            1;
-        } or die $@;
+        utf8::all->import::into($caller);
     }
 
     # Exporter の機能でシンボルをエクスポート
