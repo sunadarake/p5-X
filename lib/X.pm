@@ -28,7 +28,14 @@ use X::Shell;
 
 use Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = (@X::File::EXPORT, @X::Json::EXPORT, @X::Basename::EXPORT, @X::Http::EXPORT, @X::Shell::EXPORT);
+our @EXPORT;
+
+# 各サブモジュールの関数をエクスポートリストに追加
+push @EXPORT, @X::File::EXPORT;
+push @EXPORT, @X::Json::EXPORT;
+push @EXPORT, @X::Basename::EXPORT;
+push @EXPORT, @X::Http::EXPORT;
+push @EXPORT, @X::Shell::EXPORT;
 
 # 呼び出し側に utf8::all または Win32::Unicode::Native を適用
 sub import {
