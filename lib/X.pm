@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use utf8;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 # プラットフォーム別のUnicode処理
 # Linux/Macの場合: utf8::all
