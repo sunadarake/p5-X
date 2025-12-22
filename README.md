@@ -22,6 +22,20 @@ cd p5-X
 cpanm --installdeps . -L local
 ```
 
+**test**:
+
+```bash
+prove -Ilib -Ilocal/lib/perl5 t/
+prove -Ilib -Ilocal/lib/perl5 t/01-basic.t
+```
+
+**scriptを試しに使いたい**
+
+```bash
+vim main.pl
+perl -Ilib -Ilocal/lib/perl5 main.pl
+```
+
 ## 使い方
 
 ```perl
