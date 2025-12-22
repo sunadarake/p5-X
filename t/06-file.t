@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More tests => 10;
+use Test::More tests => 14;
 use File::Temp qw(tempdir);
 use File::Spec;
 
@@ -47,3 +47,18 @@ my $test_file = File::Spec->catfile($tempdir, 'test1.txt');
 ok(-f $test_file, 'file exists before rm');
 rm($test_file);
 ok(!-f $test_file, 'file removed after rm');
+
+# 日本語パステスト
+my $jp_dir = File::Spec->catdir($tempdir, 'テストディレクトリ');
+my $jp_file = File::Spec->catfile($jp_dir, '日本語ファイル.txt');
+fp($jp_file, '日本語コンテンツ');
+ok(-f $jp_file, 'fp creates Japanese filename');
+
+my $jp_content = fg($jp_file);
+is($jp_content, '日本語コンテンツ', 'fg reads Japanese file content');
+
+my @jp_files = ff($jp_dir);
+ok(scalar(@jp_files) >= 1, 'ff finds files in Japanese directory');
+
+rm($jp_file);
+ok(!-f $jp_file, 'rm removes Japanese filename');

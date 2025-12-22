@@ -15,12 +15,14 @@ BEGIN {
     }
 }
 
-use File::Find;
+# File::Find  の utf8 対応モジュール
+use File::Find::utf8;
 use File::Path qw(make_path remove_tree);
 use File::Copy qw(copy move);
 use File::Spec;
 use File::Basename qw(dirname);
-use Cwd qw(abs_path);
+# Cwdのutf8対応モジュール
+use Cwd::utf8 qw(abs_path);
 
 our $VERSION = '0.01';
 

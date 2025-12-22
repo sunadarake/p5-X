@@ -16,7 +16,8 @@ BEGIN {
 }
 
 use File::Basename qw(basename dirname);
-use Cwd qw(getcwd realpath);
+# Cwdのutf8対応モジュール
+use Cwd::utf8 qw(getcwd realpath);
 use File::Spec;
 
 our $VERSION = '0.01';
