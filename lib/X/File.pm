@@ -30,7 +30,7 @@ our @EXPORT = qw(ff ffa ffr fg fp md rm cp mv);
 # ディレクトリのファイルを再帰的に取得（絶対パス）
 sub ff {
     my ($root_dir) = @_;
-    return [] unless -d $root_dir;
+    return wantarray ? () : [] unless -d $root_dir;
 
     my $abs_root = abs_path($root_dir);
     my @files;
@@ -39,7 +39,7 @@ sub ff {
         push @files, $File::Find::name if -f;
     }, $abs_root);
 
-    return \@files;
+    return wantarray ? @files : \@files;
 }
 
 # ff と同じ
@@ -50,7 +50,7 @@ sub ffa {
 # root_dir を基準とした相対パスの配列を返す
 sub ffr {
     my ($root_dir) = @_;
-    return [] unless -d $root_dir;
+    return wantarray ? () : [] unless -d $root_dir;
 
     my $abs_root = abs_path($root_dir);
     my @files;
@@ -62,7 +62,7 @@ sub ffr {
         }
     }, $abs_root);
 
-    return \@files;
+    return wantarray ? @files : \@files;
 }
 
 # ファイルの中身を返す
