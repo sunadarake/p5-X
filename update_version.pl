@@ -1,4 +1,7 @@
 #!/usr/bin/env perl
+# update_version.pl - モジュールのバージョンを自動でupdateするスクリプト
+#　　0.01 0.02 のように minorバージョンをupdateする。 lib/X.pm と META.yml のバージョンを更新する
+#    majorバージョンは手動でアップデートするようにした。  
 use strict;
 use warnings;
 use X;
