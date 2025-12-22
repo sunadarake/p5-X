@@ -36,6 +36,12 @@ vim main.pl
 perl -Ilib -Ilocal/lib/perl5 main.pl
 ```
 
+モジュールのバージョンを上げるときには、下記のファイルのバージョンを変更すること。
+
+- META.yml `version: '0.02'`
+- lib/X.pm `our $version = '0.02';`
+
+
 ## 使い方
 
 ```perl
