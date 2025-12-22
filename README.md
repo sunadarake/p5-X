@@ -25,8 +25,8 @@ cpanm --installdeps . -L local
 **test**:
 
 ```bash
-prove -Ilib -Ilocal/lib/perl5 t/
-prove -Ilib -Ilocal/lib/perl5 t/01-basic.t
+./perl_test.sh                   # prove -v t/
+./perl_test.sh t/01-basic.t      # prove -v t/01-basic.t
 ```
 
 **scriptを試しに使いたい**
