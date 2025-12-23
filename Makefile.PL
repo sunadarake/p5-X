@@ -4,12 +4,17 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 # プラットフォーム別の依存関係を設定
+# File::Find::utf8 と Cwd::utf8 は以下のgitリポジトリから手動インストール:
+#   File::Find::utf8: git@github.com:sunadarake/File-Find-utf8.git
+#   Cwd::utf8: git@github.com:sunadarake/Cwd-utf8.git
 my %prereq_pm = (
-    'strict'       => 0,
-    'warnings'     => 0,
-    'HTTP::Tiny'   => 0,
-    'URI'          => 0,
-    'Import::Into' => 0,
+    'strict'            => 0,
+    'warnings'          => 0,
+    'HTTP::Tiny'        => 0,
+    'URI'               => 0,
+    'Import::Into'      => 0,
+    'File::Find::utf8'  => 0,
+    'Cwd::utf8'         => 0,
 );
 
 # Linux/Mac用のUnicode処理
