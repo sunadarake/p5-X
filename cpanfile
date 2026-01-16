@@ -15,6 +15,6 @@ on '!MSWin32' => sub {
 # Windows用のUnicode処理
 # git@github.com:sunadarake/p5-win-unicode.git からインストール
 on 'MSWin32' => sub {
-    requires 'Win32::Unicode::Native',
+    requires 'Win32::Unicode',
         git => 'git@github.com:sunadarake/p5-win-unicode.git';
 };

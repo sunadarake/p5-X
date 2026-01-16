@@ -1,10 +1,18 @@
 #!/bin/sh
 # perlのテストをする
 
-if [ $# != 0 ]; then
-  t="$1"
+# 引数のデフォルト値
+t="${1:-t/}"
+
+# localディレクトリの存在確認
+if [ ! -d "local" ]; then
+    echo "Installing dependencies from cpanfile..."
+    PERL_MM_USE_DEFAULT=1 cpanm --quiet --notest --installdeps -l local .
 else
-  t="t/"
+    echo "local directory exists. Skipping dependency installation."
 fi
 
-prove -v -Ilib/ -Ilocal/lib/perl5 "$t"
+# テスト実行
+echo ""
+echo "Running tests..."
+prove "$t"

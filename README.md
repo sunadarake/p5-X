@@ -8,13 +8,36 @@ Perlをシンプルに使うための便利関数集
 
 ```bash
 # cpanm
+# 事前に Win32::Unicodeをインストールしておくこと。
+# この方法では、自動で Win32::Unicodeはインストールされない。
 cpanm git@github.com:sunadarake/p5-X.git
 
-# cpm
-cpm install git@github.com:sunadarake/p5-X.git
 ```
 
-### ローカルで開発する場合
+### ローカルからインストール
+
+```bash
+# 1. Linux
+git clone git@github.com:sunadarake/p5-X.git
+cd p5-X
+cpanm --installdeps .
+perl Makefile.PL
+make
+make test
+sudo make install 
+
+# 2. Windows
+git clone git@github.com:sunadarake/p5-X.git
+cd p5-X
+cpanm --installdeps .
+perl Makefile.PL
+gmake
+gmake test
+gmake install 
+
+```
+
+## ローカルで開発をする場合
 
 ```bash
 git clone git@github.com:sunadarake/p5-X.git
@@ -22,25 +45,11 @@ cd p5-X
 cpanm --installdeps . -L local
 ```
 
-**test**:
+### テストをする場合
 
 ```bash
-./perl_test.sh                   # prove -v t/
-./perl_test.sh t/01-basic.t      # prove -v t/01-basic.t
+prove t/
 ```
-
-**scriptを試しに使いたい**
-
-```bash
-vim main.pl
-perl -Ilib -Ilocal/lib/perl5 main.pl
-```
-
-モジュールのバージョンを上げるときには、下記のファイルのバージョンを変更すること。
-
-- META.yml `version: '0.02'`
-- lib/X.pm `our $version = '0.02';`
-
 
 ## 使い方
 
