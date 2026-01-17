@@ -17,7 +17,10 @@ cpanm git@github.com:sunadarake/p5-X.git
 ### ローカルからインストール
 
 ```bash
-# 1. Linux
+# 自動でインストール
+perl install-deps.pl
+
+# 1. 手動でインストール (Linux
 git clone git@github.com:sunadarake/p5-X.git
 cd p5-X
 cpanm --installdeps .
@@ -26,7 +29,7 @@ make
 make test
 sudo make install 
 
-# 2. Windows
+# 2. 手動でインストール (Windows
 git clone git@github.com:sunadarake/p5-X.git
 cd p5-X
 cpanm --installdeps .

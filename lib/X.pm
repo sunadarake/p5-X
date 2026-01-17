@@ -6,15 +6,15 @@ use warnings;
 use utf8;
 use Import::Into;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 # プラットフォーム別のUnicode処理
 # Linux/Macの場合: utf8::all
 # Windowsの場合: Win32::Unicode::Native
 BEGIN {
     if ( $^O eq 'MSWin32' ) {
-        require Win32::Unicode::Native;
-        Win32::Unicode::Native->import();
+        #require Win32::Unicode::Native;
+        #Win32::Unicode::Native->import();
     }
     else {
         require utf8::all;

@@ -12,12 +12,9 @@ our $VERSION = '0.01';
 use Exporter 'import';
 our @EXPORT = qw(ff ffa ffr fg fp md rm cp mv);
 
-# OS判定
-my $IS_WIN;
 
 BEGIN {
-    $IS_WIN = ( $^O eq 'MSWin32' );
-    if ($IS_WIN) {
+    if ($^O eq 'MSWin32') {
         require Win32::Unicode::Dir;
         require Win32::Unicode::File;
         require File::Basename;
@@ -39,7 +36,7 @@ BEGIN {
 # 絶対パスを取得
 sub _abs_path {
     my ($path) = @_;
-    if ($IS_WIN) {
+    if ($^O eq 'MSWin32') {
 
         # --- 修正ポイント 1: rel2abs ---
         my $cwd        = getcwdW();
@@ -63,7 +60,7 @@ sub ff {
     my $abs_root = _abs_path($root_dir);
     my @files;
 
-    if ($IS_WIN) {
+    if ($^O eq 'MSWin32') {
         findW(
             sub {
                 my $name = $Win32::Unicode::Dir::name;
@@ -97,7 +94,7 @@ sub ffr {
     my $abs_root = _abs_path($root_dir);
     my @files;
 
-    if ($IS_WIN) {
+    if ($^O eq 'MSWin32') {
         findW(
             sub {
                 my $name = $Win32::Unicode::Dir::name;
@@ -139,7 +136,7 @@ sub fg {
     return undef unless -f $filepath;
 
     my $content;
-    if ($IS_WIN) {
+    if ($^O eq 'MSWin32') {
         my $fh = Win32::Unicode::File->new( '<', $filepath )
           or die "Cannot open $filepath: $!";
         $content = $fh->slurp;
@@ -161,7 +158,7 @@ sub fp {
     my $dir = _dirname($filepath);    # 内部ヘルパーを使用
     md($dir) unless -d $dir;
 
-    if ($IS_WIN) {
+    if ($^O eq 'MSWin32') {
         my $fh = Win32::Unicode::File->new( '>', $filepath )
           or die "Cannot write to $filepath: $!";
         $fh->print($content);
@@ -181,7 +178,7 @@ sub md {
     my ($dir) = @_;
     return 1 if -d $dir;
 
-    if ($IS_WIN) {
+    if ($^O eq 'MSWin32') {
         mkpathW($dir);
     }
     else {
@@ -195,7 +192,7 @@ sub rm {
     my ($path) = @_;
 
     if ( -d $path ) {
-        if ($IS_WIN) {
+        if ($^O eq 'MSWin32') {
             rmtreeW($path);
         }
         else {
@@ -203,7 +200,7 @@ sub rm {
         }
     }
     elsif ( -f $path ) {
-        if ($IS_WIN) {
+        if ($^O eq 'MSWin32') {
             unlinkW($path) or die "Cannot remove $path: $!";
         }
         else {
@@ -222,7 +219,7 @@ sub cp {
     my $dest_dir = _dirname($dest);    # 内部ヘルパーを使用
     md($dest_dir) unless -d $dest_dir;
 
-    if ($IS_WIN) {
+    if ($^O eq 'MSWin32') {
         copyW( $src, $dest ) or die "Cannot copy $src to $dest: $!";
     }
     else {
@@ -239,7 +236,7 @@ sub mv {
     my $dest_dir = _dirname($dest);    # 内部ヘルパーを使用
     md($dest_dir) unless -d $dest_dir;
 
-    if ($IS_WIN) {
+    if ($^O eq 'MSWin32') {
         moveW( $src, $dest ) or die "Cannot move $src to $dest: $!";
     }
     else {

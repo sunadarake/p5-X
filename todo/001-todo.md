@@ -1,31 +1,25 @@
-lib/X/Basename.pm の修正
+このXモジュールでは、Windows環境では、 Win32::Unicodeを内部で使っている。
+これを使うことで、Windows環境でUnicode対応の関数を使うことができる。　(参考に Win32_Unicode_API_doc.md を見ること。)
 
-t/03-basename.t でテストをしたところ、以下のようなエラーが出た。
+今回は、文字化け関連の問題が発生している。
 
+試しにWin32::Unicode で試してみる。正常に　オレオレ　というディレクトリが作成される。
+
+```perl
+use utf8;
+use Win32::Unicode::Dir;
+
+mkpathW("オレオレ");
 ```
-ok 7 - abs is alias of rp
-ok 8 - rel returns relative path from current dir
-Illegal byte sequence at t\03-basename.t line 51.
-ok 9 - rel returns relative path with explicit root
-# Looks like your test exited with 42 just after 9.
-Dubious, test returned 42 (wstat 10752, 0x2a00)
-Failed 4/13 subtests
+
+そして、 Xモジュールで試すと文字化けしてしまう。
+
+
+```perl
+use utf8;
+use X;
+
+md("オレオレ");
 ```
 
-この原因を突き詰めて、解決してほしい。
-
-内部では Win32::Unicodeを使っている。これは  utf8の文字列を受け入れて、 Windows Unicode API で処理するモジュールである。
-
-ドキュメントは、 Win32_Unicode_API_doc.md に書かれている。
-
-以下のように修正すること。
-
-- Never: 03-basename.t では、  Win32::Unicodeを使わない。
-- Must: 03-basename.t では以下の関数を用いること。
-```
-# Windows用エンコード/デコードヘルパー
-sub xencode { return $^O eq 'MSWin32' ? encode( 'cp932', $_[0] ) : $_[0]; }
-sub xdecode { return $^O eq 'MSWin32' ? decode( 'cp932', $_[0] ) : $_[0]; }
-```
-- Never: Win32::Unicode::Nativeを使わない。
-- Never: require Win32; をしない。
+何が問題だと思う？
