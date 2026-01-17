@@ -1,25 +1,38 @@
 このXモジュールでは、Windows環境では、 Win32::Unicodeを内部で使っている。
-これを使うことで、Windows環境でUnicode対応の関数を使うことができる。　(参考に Win32_Unicode_API_doc.md を見ること。)
+t/06-file.t をテストすると、以下のエラーが出る。
+これは日本語パスの時に適切に処理できていない。
+lib\X\File.pm　の fg 関数で問題が発生している。
+何が原因で解決をしてほしい。
+参考文献として、　Win32_Unicode_API_doc.md　がある。
 
-今回は、文字化け関連の問題が発生している。
-
-試しにWin32::Unicode で試してみる。正常に　オレオレ　というディレクトリが作成される。
-
-```perl
-use utf8;
-use Win32::Unicode::Dir;
-
-mkpathW("オレオレ");
 ```
+t\06-file.t ......
+1..14
+ok 9 - file exists before rm
+ok 10 - file removed after rm
+ok 11 - fp creates Japanese filename
 
-そして、 Xモジュールで試すと文字化けしてしまう。
+#   Failed test 'fg reads Japanese file content'
+not ok 12 - fg reads Japanese file content#   at t\06-file.t line 64.
+
+Wide character in print at C:/Strawberry/perl/lib/Test2/Formatter/TAP.pm line 125.
+#          got: undef
+#     expected: '譌･譛ｬ隱槭さ繝ｳ繝・Φ繝・
+
+#   Failed test 'ff finds files in Japanese directory'
+not ok 13 - ff finds files in Japanese directory#   at t\06-file.t line 67.
 
 
-```perl
-use utf8;
-use X;
+#   Failed test 'rm removes Japanese filename'
+#   at t\06-file.t line 70.
+not ok 14 - rm removes Japanese filename
+# Looks like you failed 3 tests of 14.
+Dubious, test returned 3 (wstat 768, 0x300)
+Failed 3/14 subtests
 
-md("オレオレ");
+Test Summary Report
+-------------------
+t\06-file.t    (Wstat: 768 (exited 3) Tests: 14 Failed: 3)
+  Failed tests:  12-14
+  Non-zero exit status: 3
 ```
-
-何が問題だと思う？
