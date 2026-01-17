@@ -12,13 +12,13 @@ our $VERSION = '0.01';
 use Exporter 'import';
 our @EXPORT = qw(ff ffa ffr fg fp md rm cp mv);
 
-
 BEGIN {
-    if ($^O eq 'MSWin32') {
+    if ( $^O eq 'MSWin32' ) {
         require Win32::Unicode::Dir;
         require Win32::Unicode::File;
         require File::Basename;
-        Win32::Unicode::Dir->import(qw(findW mkpathW rmtreeW getcwdW file_type));
+        Win32::Unicode::Dir->import(
+            qw(findW mkpathW rmtreeW getcwdW file_type));
         Win32::Unicode::File->import(qw(unlinkW copyW moveW));
     }
     else {
@@ -36,7 +36,7 @@ BEGIN {
 # 絶対パスを取得
 sub _abs_path {
     my ($path) = @_;
-    if ($^O eq 'MSWin32') {
+    if ( $^O eq 'MSWin32' ) {
 
         # --- 修正ポイント 1: rel2abs ---
         my $cwd        = getcwdW();
@@ -56,14 +56,14 @@ sub _abs_path {
 sub ff {
     my ($root_dir) = @_;
 
-    if ($^O eq 'MSWin32') {
-        return wantarray ? () : [] unless file_type('d', $root_dir);
+    if ( $^O eq 'MSWin32' ) {
+        return wantarray ? () : [] unless file_type( 'd', $root_dir );
         my $abs_root = _abs_path($root_dir);
         my @files;
         findW(
             sub {
                 my $name = $Win32::Unicode::Dir::name;
-                push @files, $name if file_type('f', $name);
+                push @files, $name if file_type( 'f', $name );
             },
             $abs_root
         );
@@ -92,14 +92,14 @@ sub ffa {
 sub ffr {
     my ($root_dir) = @_;
 
-    if ($^O eq 'MSWin32') {
-        return wantarray ? () : [] unless file_type('d', $root_dir);
+    if ( $^O eq 'MSWin32' ) {
+        return wantarray ? () : [] unless file_type( 'd', $root_dir );
         my $abs_root = _abs_path($root_dir);
         my @files;
         findW(
             sub {
                 my $name = $Win32::Unicode::Dir::name;
-                if ( file_type('f', $name) ) {
+                if ( file_type( 'f', $name ) ) {
                     my $name_bytes = Encode::encode( 'cp932', $name );
                     my $root_bytes = Encode::encode( 'cp932', $abs_root );
                     my $rel_bytes =
@@ -135,8 +135,8 @@ sub fg {
     my ($filepath) = @_;
 
     # ファイル存在チェック (Windows日本語パス対応)
-    if ($^O eq 'MSWin32') {
-        return undef unless file_type('f', $filepath);
+    if ( $^O eq 'MSWin32' ) {
+        return undef unless file_type( 'f', $filepath );
         my $fh = Win32::Unicode::File->new( '<:utf-8', $filepath )
           or die "Cannot open $filepath: $!";
         my $content = $fh->slurp;
@@ -145,7 +145,7 @@ sub fg {
     }
     else {
         return undef unless -f $filepath;
-        open my $fh, '<', $filepath or die "Cannot open $filepath: $!";
+        open my $fh, '<:utf-8', $filepath or die "Cannot open $filepath: $!";
         my $content = do { local $/; <$fh> };
         close $fh;
         return $content;
@@ -157,18 +157,19 @@ sub fp {
     my ( $filepath, $content ) = @_;
 
     # ディレクトリが存在しない場合は作成
-    my $dir = _dirname($filepath);
-    my $dir_exists = ($^O eq 'MSWin32') ? file_type('d', $dir) : -d $dir;
+    my $dir        = _dirname($filepath);
+    my $dir_exists = ( $^O eq 'MSWin32' ) ? file_type( 'd', $dir ) : -d $dir;
     md($dir) unless $dir_exists;
 
-    if ($^O eq 'MSWin32') {
+    if ( $^O eq 'MSWin32' ) {
         my $fh = Win32::Unicode::File->new( '>:utf-8', $filepath )
           or die "Cannot write to $filepath: $!";
         $fh->print($content);
         $fh->close;
     }
     else {
-        open my $fh, '>', $filepath or die "Cannot write to $filepath: $!";
+        open my $fh, '>:utf-8', $filepath
+          or die "Cannot write to $filepath: $!";
         print $fh $content;
         close $fh;
     }
@@ -180,8 +181,8 @@ sub fp {
 sub md {
     my ($dir) = @_;
 
-    if ($^O eq 'MSWin32') {
-        return 1 if file_type('d', $dir);
+    if ( $^O eq 'MSWin32' ) {
+        return 1 if file_type( 'd', $dir );
         mkpathW($dir);
     }
     else {
@@ -195,11 +196,11 @@ sub md {
 sub rm {
     my ($path) = @_;
 
-    if ($^O eq 'MSWin32') {
-        if ( file_type('d', $path) ) {
+    if ( $^O eq 'MSWin32' ) {
+        if ( file_type( 'd', $path ) ) {
             rmtreeW($path);
         }
-        elsif ( file_type('f', $path) ) {
+        elsif ( file_type( 'f', $path ) ) {
             unlinkW($path) or die "Cannot remove $path: $!";
         }
     }
@@ -221,10 +222,11 @@ sub cp {
 
     # destのディレクトリが存在しない場合は作成
     my $dest_dir = _dirname($dest);
-    my $dir_exists = ($^O eq 'MSWin32') ? file_type('d', $dest_dir) : -d $dest_dir;
+    my $dir_exists =
+      ( $^O eq 'MSWin32' ) ? file_type( 'd', $dest_dir ) : -d $dest_dir;
     md($dest_dir) unless $dir_exists;
 
-    if ($^O eq 'MSWin32') {
+    if ( $^O eq 'MSWin32' ) {
         copyW( $src, $dest ) or die "Cannot copy $src to $dest: $!";
     }
     else {
@@ -239,10 +241,11 @@ sub mv {
 
     # destのディレクトリが存在しない場合は作成
     my $dest_dir = _dirname($dest);
-    my $dir_exists = ($^O eq 'MSWin32') ? file_type('d', $dest_dir) : -d $dest_dir;
+    my $dir_exists =
+      ( $^O eq 'MSWin32' ) ? file_type( 'd', $dest_dir ) : -d $dest_dir;
     md($dest_dir) unless $dir_exists;
 
-    if ($^O eq 'MSWin32') {
+    if ( $^O eq 'MSWin32' ) {
         moveW( $src, $dest ) or die "Cannot move $src to $dest: $!";
     }
     else {
