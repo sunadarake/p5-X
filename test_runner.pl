@@ -1,5 +1,11 @@
 #!/usr/bin/env perl
 # test_runner.pl
+# テストを良い感じに自動化して実行するためのスクリプト。
+
+=pod
+    WARN: zedのターミナル上で実行してはいけない。特にWindows環境では、ファイル、ディレクトリ操作でエラーが発生する。
+          代わりに、標準ターミナル上でpowershell または コマンドプロンプトで実行するようにすること。
+=cut
 
 use strict;
 use warnings;
