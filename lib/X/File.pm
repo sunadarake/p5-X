@@ -145,7 +145,7 @@ sub fg {
     }
     else {
         return undef unless -f $filepath;
-        open my $fh, '<:utf-8', $filepath or die "Cannot open $filepath: $!";
+        open my $fh, '<:utf8', $filepath or die "Cannot open $filepath: $!";
         my $content = do { local $/; <$fh> };
         close $fh;
         return $content;
@@ -168,7 +168,7 @@ sub fp {
         $fh->close;
     }
     else {
-        open my $fh, '>:utf-8', $filepath
+        open my $fh, '>:utf8', $filepath
           or die "Cannot write to $filepath: $!";
         print $fh $content;
         close $fh;

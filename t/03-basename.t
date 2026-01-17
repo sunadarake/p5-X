@@ -13,6 +13,8 @@ BEGIN {
 # Windows用エンコード/デコードヘルパー
 sub xencode { return $^O eq 'MSWin32' ? encode( 'cp932', $_[0] ) : $_[0]; }
 sub xdecode { return $^O eq 'MSWin32' ? decode( 'cp932', $_[0] ) : $_[0]; }
+# パス区切り文字を返すヘルパー
+sub path_sep { return $^O eq 'MSWin32' ? '\\' : '/'; }
 
 my $tempdir = xdecode( tempdir( CLEANUP => 1 ) );
 
@@ -30,7 +32,7 @@ ok( defined $cwd && length($cwd) > 0, 'pwd returns current directory' );
 # rp / abs テスト
 # === 修正ポイント1: File::Spec->catfile を手動結合に変更 ===
 # 単純な文字列結合にすることで、File::Specのショートネーム変換バグを回避する
-my $tempdir_file = $tempdir . '\\test.txt';
+my $tempdir_file = $tempdir . path_sep() . 'test.txt';
 
 open my $fh, '>', xencode($tempdir_file) or die "Cannot open $tempdir_file: $!";
 close $fh;
