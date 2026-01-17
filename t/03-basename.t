@@ -14,8 +14,7 @@ BEGIN {
 sub xencode { return $^O eq 'MSWin32' ? encode( 'cp932', $_[0] ) : $_[0]; }
 sub xdecode { return $^O eq 'MSWin32' ? decode( 'cp932', $_[0] ) : $_[0]; }
 
-#my $tempdir = xdecode( tempdir( CLEANUP => 1 ) );
-my $tempdir = xdecode( tempdir() );
+my $tempdir = xdecode( tempdir( CLEANUP => 1 ) );
 
 # bn (basename) テスト
 is( bn('/foo/bar/baz.txt'), 'baz.txt', 'bn returns basename' );
@@ -54,28 +53,21 @@ is( $rel_path, 'test.txt', 'rel returns relative path from current dir' );
 my $rel_path2 = rel( $test_file_utf8, $tempdir );
 is( $rel_path2, 'test.txt', 'rel returns relative path with explicit root' );
 
-SKIP: {
-    #TODO:  日本語のファイルやディレクトリだとテストが失敗してしまうので
-    #TODO:  現状はスキップすることにした。
-    skip "Skipping Japanese path tests", 3;
+# 日本語パステスト
+my $jp_dir_utf8 = File::Spec->catdir( $tempdir, 'テスト' );
+mkdir xencode($jp_dir_utf8)    # ← ここで xencode() を追加
+  or die "Cannot mkdir " . xencode($jp_dir_utf8) . ": $!";
 
-    # 日本語パステスト
-    my $jp_dir_utf8 = File::Spec->catdir( $tempdir, 'テスト' );
-    mkdir xencode($jp_dir_utf8)    # ← ここで xencode() を追加
-      or die "Cannot mkdir " . xencode($jp_dir_utf8) . ": $!";
+my $jp_file_utf8 = File::Spec->catfile( $jp_dir_utf8, '日本語.txt' );
+open my $fh2, '>', xencode($jp_file_utf8)    # ← ここも xencode()
+  or die "Cannot open" . xencode($jp_file_utf8) . " : $!";
+close $fh2;
 
-    my $jp_file_utf8 = File::Spec->catfile( $jp_dir_utf8, '日本語.txt' );
-    open my $fh2, '>', xencode($jp_file_utf8)    # ← ここも xencode()
-      or die "Cannot open" . xencode($jp_file_utf8) . " : $!";
-    close $fh2;
-
-    is( bn($jp_file_utf8), '日本語.txt', 'bn handles Japanese filename' );
-    is( bn($jp_dir_utf8),  'テスト',     'bn handles Japanese directory' );
-    my $jp_abs = rp($jp_file_utf8);
-    ok( defined $jp_abs && File::Spec->file_name_is_absolute($jp_abs),
-        'rp handles Japanese path' );
-
-}
+is( bn($jp_file_utf8), '日本語.txt', 'bn handles Japanese filename' );
+is( bn($jp_dir_utf8),  'テスト',     'bn handles Japanese directory' );
+my $jp_abs = rp($jp_file_utf8);
+ok( defined $jp_abs && File::Spec->file_name_is_absolute($jp_abs),
+    'rp handles Japanese path' );
 
 # エクスポートテスト
 can_ok( 'X::Basename', 'bn', 'dn', 'rp', 'abs', 'rel', 'pwd' );

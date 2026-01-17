@@ -16,12 +16,7 @@ sub xencode { return $^O eq 'MSWin32' ? encode( 'cp932', $_[0] ) : $_[0]; }
 sub xdecode { return $^O eq 'MSWin32' ? decode( 'cp932', $_[0] ) : $_[0]; }
 
 # テスト用の一時ディレクトリを作成
-my $tempdir = xdecode( tempdir( CLEANUP => 0 ) );
-
-## テスト終了時の処理
-#END {
-#    remove_tree(xencode($tempdir));
-#}
+my $tempdir = xdecode( tempdir( CLEANUP => 1 ) );
 
 # テスト用ファイルを作成
 fp( File::Spec->catfile( $tempdir, 'test1.txt' ), 'content1' );
@@ -65,17 +60,11 @@ my $jp_file = File::Spec->catfile( $jp_dir, '日本語ファイル.txt' );
 fp( $jp_file, '日本語コンテンツ' );
 ok( -f xencode($jp_file), 'fp creates Japanese filename' );
 
-SKIP: {
-    #TODO:  日本語のファイルやディレクトリだとテストが失敗してしまうので
-    #TODO:  現状はスキップすることにした。
-    skip "Japanese file tests are currently disabled", 3;
+my $jp_content = fg($jp_file);
+is( $jp_content, '日本語コンテンツ', 'fg reads Japanese file content' );
 
-    my $jp_content = fg($jp_file);
-    is( $jp_content, '日本語コンテンツ', 'fg reads Japanese file content' );
+my @jp_files = ff($jp_dir);
+ok( scalar(@jp_files) >= 1, 'ff finds files in Japanese directory' );
 
-    my @jp_files = ff($jp_dir);
-    ok( scalar(@jp_files) >= 1, 'ff finds files in Japanese directory' );
-
-    rm($jp_file);
-    ok( !-f xencode($jp_file), 'rm removes Japanese filename' );
-}
+rm($jp_file);
+ok( !-f xencode($jp_file), 'rm removes Japanese filename' );
