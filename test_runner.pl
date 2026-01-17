@@ -30,7 +30,7 @@ say "";
 say "Running tests...";
 
 # Windowsでも動作するようにproveを実行
-my @cmd = ( $^X, '-S', 'prove', '-v', '-l', '-Ilocal/lib/perl5', $t );
+my @cmd = ( $^X, '-S', 'prove', '-v', '-Ilib', '-Ilocal/lib/perl5', $t );
 my $ret = system(@cmd);
 
 exit( $ret >> 8 );

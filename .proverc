@@ -1,4 +1,4 @@
---exec "perl -Iblib/lib -Ilib -Ilocal/lib/perl5"
+--exec "perl -Ilib -Ilocal/lib/perl5 -Iblib/lib"
 --color
 --timer
 --verbose
