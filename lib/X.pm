@@ -6,7 +6,7 @@ use warnings;
 use utf8;
 use Import::Into;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 # プラットフォーム別のUnicode処理
 # Linux/Macの場合: utf8::all
