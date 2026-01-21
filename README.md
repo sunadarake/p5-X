@@ -16,9 +16,14 @@ cpanm git@github.com:sunadarake/p5-X.git
 
 ### ローカルからインストール
 
+もし、Windows11でビルドをする場合は、ビルドをする前に`gcc`などがStrawberry Perlのものかをチェックしておくこと。
+MinGWの場合は正しくビルドできない。
+
+そして、このプロジェクトをダウンロードしてインストールすること。
+
 ```bash
 # 自動でインストール
-perl install-deps.pl
+perl install-global.pl
 
 # 1. 手動でインストール (Linux
 git clone git@github.com:sunadarake/p5-X.git
